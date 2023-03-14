@@ -1,3 +1,9 @@
+mod util;
+
+use util::*;
+
 fn main() {
-    println!("Hello, world!");
+    let reader = get_reader();
+
+    println!("{:?}", reader);
 }
