@@ -1,9 +1,11 @@
+mod parser;
 mod util;
 
-use util::*;
+use parser::*;
 
 fn main() {
-    let reader = get_reader();
-
-    println!("{:?}", reader);
+    match parse() {
+        Ok(_) => todo!(),
+        Err(e) => eprintln!("{e}"),
+    }
 }

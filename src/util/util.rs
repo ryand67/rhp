@@ -12,7 +12,7 @@ fn get_path_args() -> Option<PathBuf> {
         return None;
     }
 
-    Some(PathBuf::from(file_name))
+    return Some(PathBuf::from(file_name));
 }
 
 fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
@@ -23,13 +23,22 @@ fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
     return Ok(reader);
 }
 
-pub fn get_reader() -> BufReader<File> {
+pub fn get_reader() -> Result<Vec<BufReader<File>>, String> {
     let path_name = get_path_args().expect("No file path given.");
 
     if path_name.is_file() {
-        open_file(&path_name).expect("Error reading file")
-    } else {
+        if path_name.extension().unwrap() != "html" {
+            return Err(format!(
+                "Please pass an html file, you passed {:?}.",
+                path_name.file_name().unwrap()
+            ));
+        }
+
+        return Ok(vec![open_file(&path_name).expect("Error reading file")]);
+    } else if path_name.is_dir() {
         println!("lol next time");
+        todo!();
+    } else {
         todo!();
     }
 }
