@@ -6,6 +6,6 @@ use parser::*;
 fn main() {
     match parse() {
         Ok(_) => todo!(),
-        Err(e) => eprintln!("{e}"),
+        Err(e) => eprintln!("Error: {e}"),
     }
 }
