@@ -13,8 +13,7 @@ impl Parser {
         return Ok(Self { lexer });
     }
 
-    pub fn parse() -> Result<(), String> {
-        println!("oh");
-        todo!();
+    pub fn parse(&mut self) {
+        self.lexer.lex_all_files();
     }
 }

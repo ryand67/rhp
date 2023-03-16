@@ -2,10 +2,16 @@ mod parser;
 mod util;
 
 use parser::*;
+use std::process::exit;
 
 fn main() {
-    let parser = match Parser::new() {
-        Ok(_) => todo!(),
-        Err(e) => eprintln!("Error: {e}"),
+    let mut parser: Parser = match Parser::new() {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("Error: {e}");
+            exit(1);
+        }
     };
+
+    parser.parse();
 }

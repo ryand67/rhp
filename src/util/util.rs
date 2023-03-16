@@ -1,6 +1,6 @@
 use std::{
     env::args,
-    fs::File,
+    fs::{read_dir, File},
     io::{BufReader, Error},
     path::PathBuf,
 };
@@ -15,7 +15,7 @@ fn get_path_args() -> Option<PathBuf> {
     return Some(PathBuf::from(file_name));
 }
 
-fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
+pub fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
     let file = File::open(path)?;
 
     let reader = BufReader::new(file);
@@ -23,7 +23,7 @@ fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
     return Ok(reader);
 }
 
-pub fn get_reader() -> Result<Vec<BufReader<File>>, String> {
+pub fn get_reader() -> Result<Vec<PathBuf>, String> {
     let path_name = get_path_args().expect("No file path given.");
 
     if path_name.is_file() {
@@ -34,11 +34,34 @@ pub fn get_reader() -> Result<Vec<BufReader<File>>, String> {
             ));
         }
 
-        return Ok(vec![open_file(&path_name).expect("Error reading file")]);
+        return Ok(vec![path_name]);
     } else if path_name.is_dir() {
-        println!("lol next time");
-        todo!();
+        let mut v: Vec<PathBuf> = Vec::new();
+
+        let e = get_paths(&path_name, &mut v);
+        if e.is_err() {
+            return Err(format!("{}", e.unwrap_err()));
+        }
+
+        return Ok(v);
     } else {
-        todo!();
+        return Err("idk man".to_string());
     }
+}
+
+fn get_paths(path: &PathBuf, readers: &mut Vec<PathBuf>) -> Result<(), Error> {
+    let paths = read_dir(path)?;
+
+    for p in paths {
+        let entry = p?;
+        let path = entry.path();
+
+        if path.is_dir() {
+            get_paths(&path, readers)?;
+        } else {
+            readers.push(path);
+        }
+    }
+
+    Ok(())
 }

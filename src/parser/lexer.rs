@@ -1,11 +1,11 @@
-use std::{fs::File, io::BufReader};
+use std::{fs::File, io::BufReader, path::PathBuf};
 
 pub struct Lexer {
-    files: Vec<BufReader<File>>,
+    files: Vec<PathBuf>,
 }
 
 impl Lexer {
-    pub fn new(files: Vec<BufReader<File>>) -> Self {
+    pub fn new(files: Vec<PathBuf>) -> Self {
         Self { files }
     }
 
@@ -15,7 +15,7 @@ impl Lexer {
         }
     }
 
-    pub fn lex_file(&self, file: &BufReader<File>) {
+    fn lex_file(&self, file: &PathBuf) {
         todo!();
     }
 }
