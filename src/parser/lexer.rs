@@ -1,3 +1,4 @@
+use crate::parser::token::*;
 use crate::util::open_file;
 use std::{io::BufRead, path::PathBuf};
 
@@ -27,11 +28,28 @@ impl Lexer {
             }
         };
 
-        let mut line = String::new();
-        while reader.read_line(&mut line).unwrap_or(0) != 0 {
-            todo!();
+        let mut line_buf = String::new();
+        let mut mid_parse = true;
+        let mut tag_buf = String::new();
+
+        while reader.read_line(&mut line_buf).unwrap_or(0) != 0 {
+            if line_buf.ends_with("\n") {
+                line_buf = line_buf.replace("\n", "");
+            }
+
+            if mid_parse
+                && line_buf.trim().starts_with("<")
+                && line_buf.ends_with(">")
+                && !line_buf.ends_with("/>")
+            {
+                tag_buf.push_str(&line_buf);
+            }
         }
 
         return Ok(());
+    }
+
+    fn gather_content(&self, content: String) -> String {
+        todo!();
     }
 }

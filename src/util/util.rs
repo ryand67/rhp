@@ -23,7 +23,7 @@ pub fn open_file(path: &PathBuf) -> Result<BufReader<File>, Error> {
     return Ok(reader);
 }
 
-pub fn get_reader() -> Result<Vec<PathBuf>, String> {
+pub fn get_readers() -> Result<Vec<PathBuf>, String> {
     let path_name = get_path_args().expect("No file path given.");
 
     if path_name.is_file() {

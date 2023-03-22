@@ -6,7 +6,7 @@ pub struct Parser {
 
 impl Parser {
     pub fn new() -> Result<Self, String> {
-        let reader = get_reader()?;
+        let reader = get_readers()?;
 
         let lexer = Lexer::new(reader);
 
