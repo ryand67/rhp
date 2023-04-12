@@ -54,7 +54,7 @@ impl Lexer {
         self.curr = (chars[0], 0);
 
         chars.into_iter().enumerate().for_each(|(i, c)| {
-            todo!();
+            println!("{:?}", c);
         });
     }
 }
