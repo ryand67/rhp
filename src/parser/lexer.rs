@@ -7,6 +7,7 @@ pub struct Lexer {
     files: Vec<PathBuf>,
     curr: CharPos,
     content: String,
+    content_chars: Vec<char>,
 }
 
 impl Lexer {
@@ -15,6 +16,7 @@ impl Lexer {
             files,
             curr: ('\0', 0),
             content: String::default(),
+            content_chars: Vec::default(),
         };
     }
 
@@ -25,10 +27,6 @@ impl Lexer {
                 Err(e) => println!("Error opening file: {:?}", e),
             }
         }
-    }
-
-    fn set_content(&mut self, content: String) {
-        self.content = content;
     }
 
     fn lex_file(&mut self, path: &PathBuf) -> Result<(), String> {
@@ -50,11 +48,24 @@ impl Lexer {
     }
 
     fn lex_content(&mut self) {
-        let chars: Vec<char> = self.content.chars().collect();
-        self.curr = (chars[0], 0);
-
-        chars.into_iter().enumerate().for_each(|(i, c)| {
+        self.content_chars.clone().into_iter().for_each(|c| {
             println!("{:?}", c);
         });
+    }
+
+    fn set_content(&mut self, content: String) {
+        self.content = content;
+        self.content_chars = self.content.chars().collect();
+        self.curr = (self.content_chars.clone()[0], 0);
+    }
+
+    fn peak(&self) -> char {
+        self.content_chars[self.curr.1 + 1]
+    }
+
+    fn skip_whitespace(&mut self) {
+        if self.curr.0 == ' ' {
+            self.curr = (self.content_chars[self.curr.1 + 1], self.curr.1 + 1);
+        }
     }
 }
